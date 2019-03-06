@@ -37,7 +37,7 @@ def scale_data(data, scaler):
     """Takes data and sklearn scaler as input, returns scaled data.
     The function's purpose is to deal with reshaping."""
     # fit scaler to flattened data
-    data_scaled = scaler.fit_transform(np.ravel(data).reshape(-1,1))
+    data_scaled = scaler.fit_transform(data.reshape(-1,1))
     # returns scaled data in original dimensions
     return data_scaled.reshape(data.shape)
 
@@ -113,7 +113,7 @@ def get_X_y(data_list, shuffle=True):
 # step 3: get_patches from scaled data, size, shifting and dropping nans should be options
 # step 4: produce X and y arrays and return them
 
-def processing_pipeline(files, patch_size, scaler=RobustScaler(),
+def processing_pipeline(files, patch_size, scaler=None,
                        shift=True, dropna=True, shuffle=True):
     """
     Function to process data for training.
@@ -131,7 +131,7 @@ def processing_pipeline(files, patch_size, scaler=RobustScaler(),
         If True, subtract off mean of each patch
     dropna: bool
         If True, discard patches with any NaN element
-    scaler: scikit-learn scaler Class object
+    scaler: scikit-learn scaler Class object; defaults to None
         Scaler to scale the data. Defaults to RobustScaler
     shuffle: bool
         Whether or not to shuffle the elements in X,y
@@ -148,7 +148,8 @@ def processing_pipeline(files, patch_size, scaler=RobustScaler(),
         # save data to 2d array
         data_arrs[i] = data_to_array(files[i])
         # scale arrays inplace
-        data_arrs[i] = scale_data(data_arrs[i], scaler)
+        if scaler:
+            data_arrs[i] = scale_data(data_arrs[i], scaler)
         # get patches
         patches_list[i] = get_patches(data_arrs[i], patch_size,
                                      shift, dropna)

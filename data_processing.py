@@ -25,9 +25,9 @@ def data_to_array(data_address):
     data = pd.read_csv(data_address, header=None,
                   names = ['x','y','z'])
     # find out length and width
-    width, length = data['y'].nunique(), data['x'].nunique()
+    width, length = data['x'].nunique(), data['y'].nunique()
     # get z-data as reshaped ndarray 
-    z_arr = data['z'].values.reshape(width, length)
+    z_arr = data['z'].values.reshape(length, width)
     # set negative values no NaNs
     z_arr[z_arr<0] = None
     return z_arr

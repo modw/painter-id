@@ -77,13 +77,13 @@ def get_patches(data, patch_size, shift=True, dropna=True):
     return patches
 
 
-def get_X_y(data_list, y_list=None, shuffle=True):
+def get_X_y(data_list, y_labels=None, shuffle=True):
     """
     Parameters
     ---------
-    data_tuple: list of arrays
+    data_list: list of arrays
         A list with arrays of patches
-    y_list: None or list of length len(data_list)
+    y_labels: None or list of length len(data_list)
         A list of the labels associated with data_list. Defaults to None.
     shuffle: bool
         Whether or not to shuffle the elements in X,y
@@ -91,13 +91,20 @@ def get_X_y(data_list, y_list=None, shuffle=True):
     ---------
     X, y: X is an array with the patches and y has the corresponding labels as ints
     """
-    if y_list is None:
-        y_list = [None]*len(data_list)
+    # creating a y_list
+    y_list = [None]*len(data_list)
+    if y_labels is None:
         for i, data in enumerate(data_list):
             y_list[i] = i*np.ones(len(data))
+    else:
+        for i, data in enumerate(data_list):
+            y_list[i] = y_labels[i]*np.ones(len(data))       
 
+    # concatenating to create unshuffled X and y
     y = np.concatenate(y_list).reshape(-1, 1)
     X = np.concatenate(data_list)
+
+    # shuffling
     if shuffle:
         shuffled_idx = np.arange(len(y))
         np.random.shuffle(shuffled_idx)

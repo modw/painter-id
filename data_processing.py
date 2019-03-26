@@ -3,6 +3,8 @@ import numpy as np
 # for sampling and processing
 from sklearn.feature_extraction.image import extract_patches
 from sklearn.preprocessing import RobustScaler
+# for saving the scaler
+from sklearn.externals import joblib
 
 
 # # Function definitions
@@ -168,3 +170,34 @@ def processing_pipeline(files, patch_size, y_list=None, scaler=None,
     # get X,y arrays
     X, y = get_X_y(patches_list, y_list, shuffle)
     return X, y
+
+class Scaler:
+    """
+    Class to apply a scaler on a collection of X inputs.
+    Meant to be used after the processing pipeline. 
+    Contains fit and transform methods.
+    Takes care of reshaping.
+    """
+    def __init__(self, scaler=RobustScaler()):
+        self.scaler = scaler
+
+    def fit(self, X):
+        """X.shape should be (n_samples, xlen, ylen, 1)"""
+        return self.scaler.fit(X.reshape(-1,1))
+
+    def transform(self,X):
+        """X.shape should be (n_samples, xlen, ylen, 1)"""
+        return self.scaler.transform(X.reshape(-1,1)).reshape(X.shape)
+
+    def fit_transform(self, X):
+        """X.shape should be (n_samples, xlen, ylen, 1)"""
+        self.scaler.fit(X)
+        return self.scaler.transform(X)
+
+    def save_scaler(self, fname):
+        """Saves the scaler to file"""
+        joblib.dump(self.scaler, fname)
+    
+    def load_scaler(self, fname):
+        """Loads fitted scaler from file"""
+        return joblib.load(fname)

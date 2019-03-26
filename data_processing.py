@@ -191,8 +191,8 @@ class Scaler:
 
     def fit_transform(self, X):
         """X.shape should be (n_samples, xlen, ylen, 1)"""
-        self.scaler.fit(X)
-        return self.scaler.transform(X)
+        self.fit(X)
+        return self.transform(X)
 
     def save_scaler(self, fname):
         """Saves the scaler to file"""

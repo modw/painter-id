@@ -2,13 +2,13 @@
 This repository contains key data processing, analysis and modeling files for the Technical Art History project. The data itself can't be shared while the project is ongoing.
 
 ## Project and Objective
-The objective of this portion of the project is to create a classifier to differentiate artist based on profile measurements of their paintings. The project is an ongoing collaboration between the departments of Art History and Physics at Case Western Reserve University, MORE Center, Cleveland Institute of Art and the Cleveland Museum of Art.
+The objective of this portion of the project is to create a classifier to differentiate artist based on high-resolution measurements of their paintings. The project is an ongoing collaboration between the departments of Art History and Physics at Case Western Reserve University, MORE Center, Cleveland Institute of Art and the Cleveland Museum of Art.
 
 ## Data Processing Basics
 A single measurement is of the order of 2000x2000 pixels. So to make that into a trainable set we have to split it into small patches (of order 50x50). The same artist might have several different paintings, which adds to the training set nicely and controls for overfitting naturally.
 
 Here are the basics of the data processing pipeline:
-* Transform 3d profile data into a 2d numpy array.
+* Transform 3d data into a 2d numpy array.
 * Split the array into patches.
 * Offset the patches.
 * Prepare X, y arrays for Keras.

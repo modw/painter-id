@@ -100,7 +100,7 @@ def get_X_y(data_list, y_labels=None, shuffle=True):
             y_list[i] = i*np.ones(len(data))
     else:
         for i, data in enumerate(data_list):
-            y_list[i] = y_labels[i]*np.ones(len(data))       
+            y_list[i] = y_labels[i]*np.ones(len(data))
 
     # concatenating to create unshuffled X and y
     y = np.concatenate(y_list).reshape(-1, 1)
@@ -171,6 +171,7 @@ def processing_pipeline(files, patch_size, y_list=None, scaler=None,
     X, y = get_X_y(patches_list, y_list, shuffle)
     return X, y
 
+
 class Scaler:
     """
     Class to apply a scaler on a collection of X inputs.
@@ -178,16 +179,17 @@ class Scaler:
     Contains fit and transform methods.
     Takes care of reshaping.
     """
+
     def __init__(self, scaler=RobustScaler()):
         self.scaler = scaler
 
     def fit(self, X):
         """X.shape should be (n_samples, xlen, ylen, 1)"""
-        return self.scaler.fit(X.reshape(-1,1))
+        return self.scaler.fit(X.reshape(-1, 1))
 
-    def transform(self,X):
+    def transform(self, X):
         """X.shape should be (n_samples, xlen, ylen, 1)"""
-        return self.scaler.transform(X.reshape(-1,1)).reshape(X.shape)
+        return self.scaler.transform(X.reshape(-1, 1)).reshape(X.shape)
 
     def fit_transform(self, X):
         """X.shape should be (n_samples, xlen, ylen, 1)"""
@@ -197,7 +199,7 @@ class Scaler:
     def save_scaler(self, fname):
         """Saves the scaler to file"""
         joblib.dump(self.scaler, fname)
-    
-    def load_scaler(self, fname):
+
+    def load_scaler(fname):
         """Loads fitted scaler from file"""
-        return joblib.load(fname)
+        return Scaler(joblib.load(fname))
